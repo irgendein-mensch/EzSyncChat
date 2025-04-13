@@ -1,0 +1,14 @@
+name: EzSyncChat
+version: '1.0.0'
+main: de.protokollmensch.ezsyncchat.EzSyncChat
+api-version: '1.21'
+authors: [ irgendein-mensch ]
+commands:
+  ezsyncchat:
+    usage: /ezsyncchat <reload|webhook|toggle|help>
+    permission: ezsyncchat.admin
+
+permissions:
+  ezsyncchat.admin:
+    description: Access to all EzSyncChat commands
+    default: op
