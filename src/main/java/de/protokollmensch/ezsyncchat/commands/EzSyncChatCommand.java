@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class EzSyncChatCommand implements CommandExecutor {
 
@@ -48,6 +47,16 @@ public class EzSyncChatCommand implements CommandExecutor {
                 plugin.saveConfig();
                 sender.sendMessage(ChatColor.GREEN + "[EzSyncChat] Chat sync is now " + (current ? "§cdisabled" : "§aenabled") + ChatColor.GREEN + ".");
             }
+            case "icon" -> {
+                if (args.length < 2) {
+                    sender.sendMessage(ChatColor.RED + "Please provide an icon URL.");
+                    return true;
+                }
+                String iconUrl = args[1];
+                plugin.getConfig().set("server-icon-url", iconUrl);
+                plugin.saveConfig();
+                sender.sendMessage(ChatColor.GREEN + "[EzSyncChat] Server icon URL updated.");
+            }
             default -> {
                 sender.sendMessage(ChatColor.RED + "Unknown command. Use /ezsyncchat help");
             }
@@ -60,6 +69,7 @@ public class EzSyncChatCommand implements CommandExecutor {
         sender.sendMessage(ChatColor.YELLOW + "===== EzSyncChat Help =====");
         sender.sendMessage(ChatColor.AQUA + "/ezsyncchat reload" + ChatColor.GRAY + " - Reloads the configuration.");
         sender.sendMessage(ChatColor.AQUA + "/ezsyncchat webhook <URL>" + ChatColor.GRAY + " - Sets the Discord webhook URL.");
+        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat icon <URL>" + ChatColor.GRAY + " - Sets the server icon URL.");
         sender.sendMessage(ChatColor.AQUA + "/ezsyncchat toggle" + ChatColor.GRAY + " - Enables/Disables the sync.");
         sender.sendMessage(ChatColor.AQUA + "/ezsyncchat help" + ChatColor.GRAY + " - Shows this help.");
     }

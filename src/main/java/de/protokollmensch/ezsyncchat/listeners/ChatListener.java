@@ -19,33 +19,45 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        if (!config.isEnabled()) return;
+        if (!config.isEnabled() || config.getWebhookUrl() == null) return;
 
         String playerName = event.getPlayer().getName();
         String message = event.getMessage();
 
         Bukkit.getScheduler().runTaskAsynchronously(EzSyncChat.getInstance(), () -> {
-            WebhookUtil.sendPlayerMessage(config.getWebhookUrl(), playerName, message);
+            try {
+                WebhookUtil.sendPlayerMessage(config.getWebhookUrl(), playerName, message);
+            } catch (Exception e) {
+                EzSyncChat.getInstance().getLogger().warning("Failed to send chat message to Discord: " + e.getMessage());
+            }
         });
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerQuitEvent event) {
-        if (!config.isEnabled()) return;
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (!config.isEnabled() || config.getWebhookUrl() == null) return;
 
         String playerName = event.getPlayer().getName();
         Bukkit.getScheduler().runTaskAsynchronously(EzSyncChat.getInstance(), () -> {
-            WebhookUtil.sendSystemMessage(config.getWebhookUrl(), "**" + playerName + " left the game**");
+            try {
+                WebhookUtil.sendSystemMessage(config.getWebhookUrl(), "**" + playerName + " joined the game**");
+            } catch (Exception e) {
+                EzSyncChat.getInstance().getLogger().warning("Failed to send join notification to Discord: " + e.getMessage());
+            }
         });
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerJoinEvent event) {
-        if (!config.isEnabled()) return;
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (!config.isEnabled() || config.getWebhookUrl() == null) return;
 
         String playerName = event.getPlayer().getName();
         Bukkit.getScheduler().runTaskAsynchronously(EzSyncChat.getInstance(), () -> {
-            WebhookUtil.sendSystemMessage(config.getWebhookUrl(), "**" + playerName + " joined the game**");
+            try {
+                WebhookUtil.sendSystemMessage(config.getWebhookUrl(), "**" + playerName + " left the game**");
+            } catch (Exception e) {
+                EzSyncChat.getInstance().getLogger().warning("Failed to send quit notification to Discord: " + e.getMessage());
+            }
         });
     }
 }

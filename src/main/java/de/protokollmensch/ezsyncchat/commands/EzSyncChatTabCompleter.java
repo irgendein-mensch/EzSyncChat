@@ -16,13 +16,11 @@ public class EzSyncChatTabCompleter implements TabCompleter {
             if (sender.hasPermission("ezsyncchat.admin")) {
                 completions.add("reload");
                 completions.add("webhook");
+                completions.add("icon");
                 completions.add("toggle");
                 completions.add("help");
             }
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("webhook")) {
-            completions.add("<URL>");
         }
-
         return completions;
     }
 }
