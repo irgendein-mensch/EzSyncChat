@@ -19,6 +19,7 @@ public class EzSyncChatTabCompleter implements TabCompleter {
                 completions.add("icon");
                 completions.add("toggle");
                 completions.add("help");
+                completions.add("manager");
             }
         }
         return completions;

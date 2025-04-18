@@ -5,9 +5,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class EzSyncChatCommand implements CommandExecutor {
-
     private final EzSyncChat plugin;
 
     public EzSyncChatCommand(EzSyncChat plugin) {
@@ -21,8 +21,26 @@ public class EzSyncChatCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
+        if (args.length == 0) {
+            if (sender instanceof Player player) {
+                plugin.getGUIManager().openSettingsGUI(player);
+            } else {
+                sendHelp(sender);
+            }
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("help")) {
             sendHelp(sender);
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("manager")) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
+                return true;
+            }
+            plugin.getGUIManager().openSettingsGUI(player);
             return true;
         }
 
@@ -57,20 +75,19 @@ public class EzSyncChatCommand implements CommandExecutor {
                 plugin.saveConfig();
                 sender.sendMessage(ChatColor.GREEN + "[EzSyncChat] Server icon URL updated.");
             }
-            default -> {
-                sender.sendMessage(ChatColor.RED + "Unknown command. Use /ezsyncchat help");
-            }
+            default -> sender.sendMessage(ChatColor.RED + "Unknown command. Use /ezsyncchat help");
         }
-
         return true;
     }
 
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(ChatColor.YELLOW + "===== EzSyncChat Help =====");
-        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat reload" + ChatColor.GRAY + " - Reloads the configuration.");
-        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat webhook <URL>" + ChatColor.GRAY + " - Sets the Discord webhook URL.");
-        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat icon <URL>" + ChatColor.GRAY + " - Sets the server icon URL.");
-        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat toggle" + ChatColor.GRAY + " - Enables/Disables the sync.");
-        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat help" + ChatColor.GRAY + " - Shows this help.");
+        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat" + ChatColor.GRAY + " - Opens the settings GUI");
+        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat manager" + ChatColor.GRAY + " - Opens the settings GUI");
+        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat reload" + ChatColor.GRAY + " - Reloads the configuration");
+        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat webhook <URL>" + ChatColor.GRAY + " - Sets the Discord webhook URL");
+        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat icon <URL>" + ChatColor.GRAY + " - Sets the server icon URL");
+        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat toggle" + ChatColor.GRAY + " - Enables/Disables the sync");
+        sender.sendMessage(ChatColor.AQUA + "/ezsyncchat help" + ChatColor.GRAY + " - Shows this help");
     }
 }
