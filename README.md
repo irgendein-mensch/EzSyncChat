@@ -31,6 +31,8 @@ server-icon-url: "" # Custom icon for system messages
 | `/ezsyncchat webhook <url>` | Set webhook URL |
 | `/ezsyncchat icon <url>` | Set server icon |
 | `/ezsyncchat toggle` | Toggle chat sync |
+| `/ezsyncchat manager` | Opens the settings GUI |
+
 
 ## Technical
 
